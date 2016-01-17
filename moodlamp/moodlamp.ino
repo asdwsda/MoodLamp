@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <Ticker.h>
+#include <FS.h>
 
 #include "rgbled.h"
 #include "rainbow.h"
@@ -52,6 +53,7 @@ void handleRoot() {
     msg += "\t\treset:\tReset rainbow to initial state.\n";
     msg += "/restart: Restart the mood lamp.\n";
     msg += "/status: Show the current mode and color of LEDs.\n";
+    msg += "/interactive: Interactive lamp control page.\n";
 
     msg += "\n";
 
@@ -130,6 +132,18 @@ void handleRainbow() {
     }
 }
 
+void handleInteractive() {
+    String path = "/index.html";
+    if (SPIFFS.exists(path)) {
+        File f = SPIFFS.open("/index.html", "r");
+        String content_type = "text/html";
+        server.streamFile(f, content_type);
+        f.close();
+    } else {
+        handleNotFound();
+    }
+}
+
 RGB getRGBFromArguments() {
     RGB rgb = {};
     if(server.hasArg("r")) {
@@ -195,6 +209,7 @@ void setupWebServer() {
     server.on("/rainbow", HTTP_GET, handleRainbow);
     server.on("/status", HTTP_GET, handleStatus);
     server.on("/restart", HTTP_GET, handleRestart);
+    server.on("/interactive", HTTP_GET, handleInteractive);
     server.onNotFound(handleNotFound);
 
     server.begin();
@@ -211,6 +226,7 @@ void setup() {
     analogWriteFreq(2000);
     analogWriteRange(255);
     connectToAP();
+    SPIFFS.begin();
     setupWebServer();
 }
 

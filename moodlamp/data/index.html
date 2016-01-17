@@ -1,0 +1,142 @@
+<html>
+<head>
+<script>
+
+var leds = [
+    {r: 0, g:0, b:0},
+    {r: 0, g:0, b:0}
+];
+
+
+function sendRequest(command, params) {
+    var xh = new XMLHttpRequest();
+    var fd = new FormData();
+    var get_params = "";
+    for (key in params) {
+        get_params += key + "=" + params[key] + "&"
+    }
+    xh.onreadystatechange = function() {
+        if (xh.readyState == 4) {
+            console.log(xh.responseText);
+            document.getElementById("response").innerHTML = xh.responseText;
+        }
+    }
+    xh.open("GET", "/" + command + "?" + get_params);
+    xh.send(null);
+}
+
+function colorChange(id, channel, value) {
+    elem = document.getElementById(channel + id + "_val");
+    elem.innerHTML = value;
+
+    leds[id][channel] = value;
+
+    var params = {};
+    params['r'] = leds[id]['r'];
+    params['g'] = leds[id]['g'];
+    params['b'] = leds[id]['b'];
+    params['id'] = id;
+    sendRequest("color", params);
+}
+</script>
+</head>
+<body>
+<h1>MoodLamp control</h1>
+<div>
+    <fieldset style="width: 500">
+        <legend>LED color control</legend>
+        <div>
+        <input type="checkbox" id="colorLock" /> Lock color channels
+        </div>
+        <fieldset style="width: 215; float: left">
+            <legend>LED #1</legend>
+            <table>
+            <tr>
+                <td>
+                    Red:
+                </td>
+                <td>
+                    <input style="float: right" type="range" id="r1" min="0" max="255" value="0" onchange="colorChange(0, 'r', this.value)">
+                </td>
+                <td id="r0_val">
+                    0
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Green:
+                </td>
+                <td>
+                    <input style="float: right" type="range" id="g1" min="0" max="255" value="0" onchange="colorChange(0, 'g', this.value)">
+                </td>
+                <td id="g0_val">
+                    0
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Blue:
+                </td>
+                <td>
+                    <input style="float: right" type="range" id="b1" min="0" max="255" value="0" onchange="colorChange(0, 'b', this.value)">
+                </td>
+                <td id="b0_val">
+                    0
+                </td>
+            </tr>
+            </table>
+        </fieldset>
+        <fieldset style="width: 215; float: right">
+            <legend>LED #2</legend>
+            <table>
+            <tr>
+                <td>
+                    Red:
+                </td>
+                <td>
+                    <input style="float: right" type="range" id="r2" min="0" max="255" value="0" onchange="colorChange(1, 'r', this.value)">
+                </td>
+                <td id="r1_val">
+                    0
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Green:
+                </td>
+                <td>
+                    <input style="float: right" type="range" id="g2" min="0" max="255" value="0" onchange="colorChange(1, 'g', this.value)">
+                </td>
+                <td id="g1_val">
+                    0
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Blue:
+                </td>
+                <td>
+                    <input style="float: right" type="range" id="b2" min="0" max="255" value="0" onchange="colorChange(1, 'b', this.value)">
+                </td>
+                <td id="b1_val">
+                    0
+                </td>
+            </tr>
+            </table>
+        </fieldset>
+    </fieldset>
+</div>
+<div>
+    <fieldset style="width: 235; float: left">
+        <legend>Rainbow</legend>
+        <input style="width: 115" type="button" id="startRainbow" value="Start" onClick="sendRequest('rainbow', {'action': 'start'});">
+        <input style="width: 115" type="button" id="stopRainbow" value="Stop" onClick="sendRequest('rainbow', {'action': 'stop'});">
+        <br/>
+        <input style="width: 115" type="button" id="pauseRainbow" value="Pause" onClick="sendRequest('rainbow', {'action': 'pause'});">
+        <input style="width: 115" type="button" id="resetRainbow" value="Reset" onClick="sendRequest('rainbow', {'action': 'reset'});;">
+    </fieldset>
+</div>
+<div id="response"></div>
+
+</body>
+</html>
