@@ -53,7 +53,7 @@ void handleRoot() {
     msg += "\tArguments:\n";
     msg += "\t\taction:\tstart|stop|pause|reset\tStart, stop, pause or reset animation.\n";
     msg += "/restart: Restart the mood lamp.\n";
-    msg += "/status: Show the current mode and color of LEDs.\n";
+    msg += "/status: Return the current mode and color of LEDs in JSON format.\n";
     msg += "/interactive: Interactive lamp control page.\n";
 
     msg += "\n";
@@ -62,24 +62,22 @@ void handleRoot() {
 }
 
 void handleStatus() {
-    String status = "Mode: ";
-    status += rainbow.isRunning() == true ? "Rainbow" : "Simple color";
-    status += "\n";
+    String status = "{\"mode\": ";
+    status += rainbow.isRunning() == true ? "\"rainbow\"" : "\"color\"";
+    status += ", \"leds\": [";
     for (int i = 0; i < NUM_LEDS; i++) {
         RGB led = leds[i].getColor();
-        status += "LED #";
-        status += i;
-        status += ": R = ";
+        status += "{\"r\": ";
         status += led.r;
-        status += "; G = ";
+        status += ", \"g\": ";
         status += led.g;
-        status += "; B = ";
+        status += ", \"b\": ";
         status += led.b;
-        status += "\n";
+        status += (i == NUM_LEDS - 1) ? "}" : "},";
     }
-    status += "\n\n";
+    status += "]}\n\n";
 
-    server.send(200, "text/plain", status);
+    server.send(200, "text/json", status);
 }
 
 void handleNotFound() {
