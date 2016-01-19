@@ -41,8 +41,11 @@ void responseError404() {
 
 //================= HANDLERS =================
 void handleRoot() {
-    String msg = "Hello from MoodLamp!\n\n";
-    msg += "Available commands:\n";
+    serveFile("/index.html");
+}
+
+void handleHelp() {
+    String msg = "Available commands:\n\n";
     msg += "/color: Set color of given led.\n";
     msg += "\tArguments:\n";
     msg += "\t\tid:\t0..255\tId of the LED to set. If not set, all leds will be set.\n";
@@ -54,7 +57,7 @@ void handleRoot() {
     msg += "\t\taction:\tstart|stop|pause|reset\tStart, stop, pause or reset animation.\n";
     msg += "/restart: Restart the mood lamp.\n";
     msg += "/status: Return the current mode and color of LEDs in JSON format.\n";
-    msg += "/interactive: Interactive lamp control page.\n";
+    msg += "/help: Show this page.\n";
 
     msg += "\n";
 
@@ -129,12 +132,6 @@ void handleRainbow() {
     } else {
         responseError400("Missing argument: 'action'");
     }
-}
-
-void handleInteractive() {
-    String path = "/index.html";
-    String content_type = "text/html";
-    serveFile(path);
 }
 
 String getContentType(String filename){
@@ -222,8 +219,8 @@ void setupWebServer() {
     server.on("/color", HTTP_GET, handleColor);
     server.on("/rainbow", HTTP_GET, handleRainbow);
     server.on("/status", HTTP_GET, handleStatus);
+    server.on("/help", HTTP_GET, handleHelp);
     server.on("/restart", HTTP_GET, handleRestart);
-    server.on("/interactive", HTTP_GET, handleInteractive);
     server.onNotFound(handleNotFound);
 
     server.begin();
