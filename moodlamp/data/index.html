@@ -1,142 +1,124 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html>
 <head>
-<script>
-
-var leds = [
-    {r: 0, g:0, b:0},
-    {r: 0, g:0, b:0}
-];
-
-
-function sendRequest(command, params) {
-    var xh = new XMLHttpRequest();
-    var fd = new FormData();
-    var get_params = "";
-    for (key in params) {
-        get_params += key + "=" + params[key] + "&"
-    }
-    xh.onreadystatechange = function() {
-        if (xh.readyState == 4) {
-            console.log(xh.responseText);
-            document.getElementById("response").innerHTML = xh.responseText;
-        }
-    }
-    xh.open("GET", "/" + command + "?" + get_params);
-    xh.send(null);
-}
-
-function colorChange(id, channel, value) {
-    elem = document.getElementById(channel + id + "_val");
-    elem.innerHTML = value;
-
-    leds[id][channel] = value;
-
-    var params = {};
-    params['r'] = leds[id]['r'];
-    params['g'] = leds[id]['g'];
-    params['b'] = leds[id]['b'];
-    params['id'] = id;
-    sendRequest("color", params);
-}
-</script>
+<script src="moodlamp.js"></script>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<h1>MoodLamp control</h1>
-<div>
-    <fieldset style="width: 500">
-        <legend>LED color control</legend>
-        <div>
-        <input type="checkbox" id="colorLock" /> Lock color channels
+<div class="header">
+    <h1 class="header">MoodLamp control</h1>
+</div>
+<div class="row">
+    <div class="col-3">
+        <div class="box">
+            <div class="box-heading">Led #1</div>
+            <div class="box-content">
+                <table>
+                    <tr>
+                        <td class="name">
+                            Red:
+                        </td>
+                        <td class="slider">
+                            <input type="range" class="red" min="0" max="255" value="0" data-led_id="0" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                        </td>
+                        <td class="sliderVal" id="r_0_val">
+                            0
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Green:
+                        </td>
+                        <td>
+                            <input type="range" class="green" min="0" max="255" value="0" data-led_id="0" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                        </td>
+                        <td id="g_0_val">
+                            0
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Blue:
+                        </td>
+                        <td>
+                            <input type="range" class="blue" min="0" max="255" value="0" data-led_id="0" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                        </td>
+                        <td id="b_0_val">
+                            0
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <fieldset style="width: 215; float: left">
-            <legend>LED #1</legend>
-            <table>
-            <tr>
-                <td>
-                    Red:
-                </td>
-                <td>
-                    <input style="float: right" type="range" id="r1" min="0" max="255" value="0" onchange="colorChange(0, 'r', this.value)">
-                </td>
-                <td id="r0_val">
-                    0
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Green:
-                </td>
-                <td>
-                    <input style="float: right" type="range" id="g1" min="0" max="255" value="0" onchange="colorChange(0, 'g', this.value)">
-                </td>
-                <td id="g0_val">
-                    0
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Blue:
-                </td>
-                <td>
-                    <input style="float: right" type="range" id="b1" min="0" max="255" value="0" onchange="colorChange(0, 'b', this.value)">
-                </td>
-                <td id="b0_val">
-                    0
-                </td>
-            </tr>
-            </table>
-        </fieldset>
-        <fieldset style="width: 215; float: right">
-            <legend>LED #2</legend>
-            <table>
-            <tr>
-                <td>
-                    Red:
-                </td>
-                <td>
-                    <input style="float: right" type="range" id="r2" min="0" max="255" value="0" onchange="colorChange(1, 'r', this.value)">
-                </td>
-                <td id="r1_val">
-                    0
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Green:
-                </td>
-                <td>
-                    <input style="float: right" type="range" id="g2" min="0" max="255" value="0" onchange="colorChange(1, 'g', this.value)">
-                </td>
-                <td id="g1_val">
-                    0
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Blue:
-                </td>
-                <td>
-                    <input style="float: right" type="range" id="b2" min="0" max="255" value="0" onchange="colorChange(1, 'b', this.value)">
-                </td>
-                <td id="b1_val">
-                    0
-                </td>
-            </tr>
-            </table>
-        </fieldset>
-    </fieldset>
+    </div>
+    <div class="col-3">
+        <div class="box">
+            <div class="box-heading">Led #2</div>
+            <div class="box-content">
+                <table>
+                    <tr>
+                        <td class="name">
+                            Red:
+                        </td>
+                        <td class="slider">
+                            <input type="range" class="red" min="0" max="255" value="0" data-led_id="1" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                        </td>
+                        <td class="sliderVal" id="r_1_val">
+                            0
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Green:
+                        </td>
+                        <td>
+                            <input type="range" class="green" min="0" max="255" value="0" data-led_id="1" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                        </td>
+                        <td id="g_1_val">
+                            0
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Blue:
+                        </td>
+                        <td>
+                            <input type="range" class="blue" min="0" max="255" value="0" data-led_id="1" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                        </td>
+                        <td id="b_1_val">
+                            0
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="box">
+            <div class="box-heading">Rainbow</div>
+            <div class="box-content">
+                <table class="rainbow">
+                    <tr>
+                        <td class="btnCell">
+                            <button id="start-rainbow" onclick="rainbow('start')">Start</button>
+                        </td>
+                        <td class="btnCell">
+                            <button id="stop-rainbow" onclick="rainbow('stop')">Stop</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="btnCell">
+                            <button id="pause-rainbow" onclick="rainbow('pause')">Pause</button>
+                        </td>
+                        <td class="btnCell">
+                            <button id="reset-rainbow" onclick="rainbow('reset')">Reset</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <fieldset style="width: 235; float: left">
-        <legend>Rainbow</legend>
-        <input style="width: 115" type="button" id="startRainbow" value="Start" onClick="sendRequest('rainbow', {'action': 'start'});">
-        <input style="width: 115" type="button" id="stopRainbow" value="Stop" onClick="sendRequest('rainbow', {'action': 'stop'});">
-        <br/>
-        <input style="width: 115" type="button" id="pauseRainbow" value="Pause" onClick="sendRequest('rainbow', {'action': 'pause'});">
-        <input style="width: 115" type="button" id="resetRainbow" value="Reset" onClick="sendRequest('rainbow', {'action': 'reset'});;">
-    </fieldset>
-</div>
-<div id="response"></div>
 
 </body>
 </html>
