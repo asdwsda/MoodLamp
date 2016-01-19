@@ -35,6 +35,10 @@ void responseError400(String msg) {
     server.send(400, "text/plain", msg + "\n\n");
 }
 
+void responseError404() {
+    server.send(404, "text/plain", "404 - Not Found\n\n");
+}
+
 //================= HANDLERS =================
 void handleRoot() {
     String msg = "Hello from MoodLamp!\n\n";
@@ -79,7 +83,7 @@ void handleStatus() {
 }
 
 void handleNotFound() {
-    server.send(404, "text/plain", "Error 404 - Not found\n\n");
+    serveFile(server.uri());
 }
 void handleRestart() {
     responseOk();
@@ -131,13 +135,28 @@ void handleRainbow() {
 
 void handleInteractive() {
     String path = "/index.html";
+    String content_type = "text/html";
+    serveFile(path);
+}
+
+String getContentType(String filename){
+  if (filename.endsWith(".html"))
+      return "text/html";
+  else if (filename.endsWith(".css"))
+      return "text/css";
+  else if (filename.endsWith(".js"))
+      return "application/javascript";
+  return "text/plain";
+}
+
+void serveFile(String path) {
     if (SPIFFS.exists(path)) {
-        File f = SPIFFS.open("/index.html", "r");
-        String content_type = "text/html";
-        server.streamFile(f, content_type);
-        f.close();
+        File file = SPIFFS.open(path, "r");
+        String content_type = getContentType(path);
+        server.streamFile(file, content_type);
+        file.close();
     } else {
-        handleNotFound();
+        responseError404();
     }
 }
 
