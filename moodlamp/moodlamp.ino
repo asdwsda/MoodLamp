@@ -196,11 +196,15 @@ void connectToAP() {
     }
     if (WiFi.status() != WL_CONNECTED) {
         Serial.println("\n[ERROR] Cannot connect to AP");
-        setErrorIndicator();
-        while(1) delay(500);
+        errorLoop();
     }
 
     Serial.println("\n[SETUP] Connected");
+}
+
+void errorLoop() {
+    setErrorIndicator();
+    while(1) delay(500);
 }
 
 void setErrorIndicator() {
@@ -211,6 +215,15 @@ void setErrorIndicator() {
 void setReadyIndicator() {
     RGB ready = {0, 70, 0};
     setAllLed(ready);
+}
+
+void mountFS() {
+    Serial.println("[SETUP] Mounting FS...");
+    if(!SPIFFS.begin()) {
+        Serial.println("[ERROR] Failed to mount file system");
+        errorLoop();
+    }
+    Serial.println("[SETUP] Mounted");
 }
 
 void setupWebServer() {
@@ -235,8 +248,8 @@ void setup() {
     Serial.println("\n\nStart");
     analogWriteFreq(2000);
     analogWriteRange(255);
+    mountFS();
     connectToAP();
-    SPIFFS.begin();
     setupWebServer();
 }
 
