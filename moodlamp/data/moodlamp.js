@@ -1,6 +1,7 @@
+var mode = "color";
 var leds = [
-    {r: 0, g:0, b:0},
-    {r: 0, g:0, b:0}
+    {r: 0, g: 0, b: 0},
+    {r: 0, g: 0, b: 0}
 ];
 
 function disabled(id, state) {
@@ -8,7 +9,11 @@ function disabled(id, state) {
 }
 
 function rainbow(action) {
-    sendRequest("rainbow", {"action": action}, null);
+    sendRequest("rainbow", {"action": action}, function(xh) {
+        if (xh.status == "200") {
+            refreshStatus()
+        }
+    });
 }
 
 function sendRequest(command, params, callback) {
@@ -26,6 +31,29 @@ function sendRequest(command, params, callback) {
     }
     xh.open("GET", "/" + command + "?" + get_params);
     xh.send(null);
+}
+
+function refreshStatus() {
+    sendRequest("status", {}, function(xh) {
+        var status = JSON.parse(xh.responseText);
+        mode = status["mode"];
+        leds = status["leds"];
+        updateSliders();
+    });
+}
+
+function updateSliders() {
+    var sliders = document.querySelectorAll('input[type=range]');
+    var sliderCount = sliders.length;
+    for (var i = 0; i < sliderCount; i++) {
+        updateSlider(sliders[i]);
+    }
+}
+
+function updateSlider(slider) {
+    slider.disabled = (mode == "color") ? false : true;
+    slider.value = leds[slider.dataset.led_id][slider.dataset.channel]
+    updateSliderVal(slider);
 }
 
 function updateSliderVal(slider) {

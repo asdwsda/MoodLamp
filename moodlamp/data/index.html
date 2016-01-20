@@ -4,7 +4,7 @@
 <script src="moodlamp.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body>
+<body onload="refreshStatus()">
 <div class="header">
     <h1 class="header">MoodLamp control</h1>
 </div>
@@ -19,7 +19,7 @@
                             Red:
                         </td>
                         <td class="slider">
-                            <input type="range" class="red" min="0" max="255" value="0" data-led_id="0" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                            <input type="range" class="red" min="0" max="255" value="0" data-led_id="0" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
                         </td>
                         <td class="sliderVal" id="r_0_val">
                             0
@@ -30,7 +30,7 @@
                             Green:
                         </td>
                         <td>
-                            <input type="range" class="green" min="0" max="255" value="0" data-led_id="0" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                            <input type="range" class="green" min="0" max="255" value="0" data-led_id="0" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
                         </td>
                         <td id="g_0_val">
                             0
@@ -41,7 +41,7 @@
                             Blue:
                         </td>
                         <td>
-                            <input type="range" class="blue" min="0" max="255" value="0" data-led_id="0" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                            <input type="range" class="blue" min="0" max="255" value="0" data-led_id="0" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
                         </td>
                         <td id="b_0_val">
                             0
@@ -61,7 +61,7 @@
                             Red:
                         </td>
                         <td class="slider">
-                            <input type="range" class="red" min="0" max="255" value="0" data-led_id="1" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                            <input type="range" class="red" min="0" max="255" value="0" data-led_id="1" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
                         </td>
                         <td class="sliderVal" id="r_1_val">
                             0
@@ -72,7 +72,7 @@
                             Green:
                         </td>
                         <td>
-                            <input type="range" class="green" min="0" max="255" value="0" data-led_id="1" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                            <input type="range" class="green" min="0" max="255" value="0" data-led_id="1" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
                         </td>
                         <td id="g_1_val">
                             0
@@ -83,7 +83,7 @@
                             Blue:
                         </td>
                         <td>
-                            <input type="range" class="blue" min="0" max="255" value="0" data-led_id="1" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)">
+                            <input type="range" class="blue" min="0" max="255" value="0" data-led_id="1" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
                         </td>
                         <td id="b_1_val">
                             0
