@@ -25,7 +25,6 @@ void setAllLed(RGB rgb) {
     }
 }
 
-
 //================= responses =================
 void responseOk() {
     server.send(200, "text/plain", "ok\n\n");
