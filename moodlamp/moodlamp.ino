@@ -183,7 +183,7 @@ bool getRainbowActionFromArguments() {
 //================= INIT =================
 
 void connectToAP() {
-    Serial.print("[SETUP] Connecting to ");
+    Serial.print("[WIFI-STA] Connecting to ");
     Serial.print(ssid);
 
     WiFi.begin(ssid, password);
@@ -195,11 +195,11 @@ void connectToAP() {
         Serial.print(" .");
     }
     if (WiFi.status() != WL_CONNECTED) {
-        Serial.println("\n[ERROR] Cannot connect to AP");
+        Serial.println("\n[WIFI-STA][ERROR] Cannot connect to AP");
         errorLoop();
     }
 
-    Serial.println("\n[SETUP] Connected");
+    Serial.println("\n[WIFI-STA] Connected");
 }
 
 void errorLoop() {
@@ -218,12 +218,12 @@ void setReadyIndicator() {
 }
 
 void mountFS() {
-    Serial.println("[SETUP] Mounting FS...");
+    Serial.println("[SPIFFS] Mounting FS...");
     if(!SPIFFS.begin()) {
-        Serial.println("[ERROR] Failed to mount file system");
+        Serial.println("[SPIFFS] Failed to mount file system");
         errorLoop();
     }
-    Serial.println("[SETUP] Mounted");
+    Serial.println("[SPIFFS] Mounted");
 }
 
 void setupWebServer() {
@@ -236,11 +236,10 @@ void setupWebServer() {
     server.onNotFound(handleNotFound);
 
     server.begin();
-    Serial.print("[SETUP] MoodLamp is ready to use at ");
+    Serial.print("[WIFI-STA] MoodLamp is ready to use at ");
     Serial.print(WiFi.localIP());
     Serial.print(":");
     Serial.println(SRV_PORT);
-    Serial.println("[SETUP] MoodLamp initialized");
 }
 
 void setup() {
@@ -251,6 +250,7 @@ void setup() {
     mountFS();
     connectToAP();
     setupWebServer();
+    Serial.println("[INFO] MoodLamp initialized");
 }
 
 void loop() {
