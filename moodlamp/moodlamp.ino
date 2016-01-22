@@ -1,5 +1,8 @@
+#include <ArduinoOTA.h>
+#include <ESP8266mDNS.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <WiFiUdp.h>
 #include <Ticker.h>
 #include <FS.h>
 
@@ -11,6 +14,7 @@
 #define SRV_PORT 80
 const char* ssid = "<your_ssid>";
 const char* password = "<your_password>";
+const char* mdns_hostname = "moodlamp";
 
 ESP8266WebServer server(SRV_PORT);
 
@@ -226,6 +230,32 @@ void mountFS() {
     Serial.println("[SPIFFS] Mounted");
 }
 
+void setupOTA() {
+    ArduinoOTA.onStart([]() {
+        Serial.println("[OTA] Start");
+    });
+
+    ArduinoOTA.onEnd([]() {
+        Serial.println("\n[OTA] End");
+    });
+
+    ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+        Serial.printf("[OTA] Progress: %u%%\r", (progress / (total / 100)));
+    });
+
+    ArduinoOTA.onError([](ota_error_t error) {
+        Serial.printf("[OTA] Error[%u]: ", error);
+        if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+        else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+        else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+        else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+        else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    });
+
+    ArduinoOTA.setHostname(mdns_hostname);
+    ArduinoOTA.begin();
+    Serial.println("[OTA] Initialized");
+}
 void setupWebServer() {
     server.on("/", HTTP_GET, handleRoot);
     server.on("/color", HTTP_GET, handleColor);
@@ -249,6 +279,7 @@ void setup() {
     analogWriteRange(255);
     mountFS();
     connectToAP();
+    setupOTA();
     setupWebServer();
     Serial.println("[INFO] MoodLamp initialized");
 }
@@ -258,6 +289,7 @@ void loop() {
 
     while(1) {
         server.handleClient();
+        ArduinoOTA.handle();
         delay(10);
     }
 }
