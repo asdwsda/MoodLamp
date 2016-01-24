@@ -10,8 +10,10 @@ OTA_HOST = moodlamp.local
 OTA_PORT = 8266
 SPIFFS_IMG = moodlamp.spiffs.bin
 
-compile:
+$(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
+
+compile: $(BUILD_DIR)
 	$(ARDUINO_BIN) --verify --verbose \
       --pref build.path=$(BUILD_DIR) \
       --pref sketchbook.path=$(SKETCH_DIR) \
@@ -27,8 +29,7 @@ program: compile
       --file $(BUILD_DIR)/moodlamp.cpp.bin \
       --progress \
 
-spiffs:
-	@mkdir -p $(BUILD_DIR)
+spiffs: $(BUILD_DIR)
 	$(MKSPIFFS) \
       -c moodlamp/data \
       -p 256 \
