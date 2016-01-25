@@ -7,6 +7,7 @@ INO = moodlamp.ino
 
 OTA_HOST = moodlamp.local
 OTA_PORT = 8266
+OTA_PASSWORD = <OTA_password>
 
 ESPOTA = $(shell find $(PACKAGE) -type f -name espota.py)
 MKSPIFFS = $(shell find $(PACKAGE) -type f -name mkspiffs)
@@ -29,6 +30,7 @@ program: compile
 	$(PYTHON_BIN) $(ESPOTA) \
       --ip $(OTA_HOST) \
       --port $(OTA_PORT) \
+      --auth $(OTA_PASSWORD) \
       --file $(BUILD_DIR)/moodlamp.cpp.bin \
       --progress \
 
@@ -44,6 +46,7 @@ data: spiffs
 	$(PYTHON_BIN) $(ESPOTA) \
       --ip $(OTA_HOST) \
       --port $(OTA_PORT) \
+      --auth $(OTA_PASSWORD) \
       --spiffs \
       --file $(BUILD_DIR)/$(SPIFFS_IMG) \
       --progress

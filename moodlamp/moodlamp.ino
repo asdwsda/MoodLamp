@@ -12,9 +12,12 @@
 #define NUM_LEDS 2
 
 #define SRV_PORT 80
+#define OTA_PORT 8266
+
 const char* ssid = "<your_ssid>";
 const char* password = "<your_password>";
 const char* mdns_hostname = "moodlamp";
+const char* ota_password = "<OTA_password>";
 
 ESP8266WebServer server(SRV_PORT);
 
@@ -252,10 +255,13 @@ void setupOTA() {
         else if (error == OTA_END_ERROR) Serial.println("End Failed");
     });
 
+    ArduinoOTA.setPort(OTA_PORT);
     ArduinoOTA.setHostname(mdns_hostname);
+    ArduinoOTA.setPassword(ota_password);
     ArduinoOTA.begin();
     Serial.println("[OTA] Initialized");
 }
+
 void setupWebServer() {
     server.on("/", HTTP_GET, handleRoot);
     server.on("/color", HTTP_GET, handleColor);
