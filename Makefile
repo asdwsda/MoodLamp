@@ -1,13 +1,16 @@
+PYTHON_BIN ?= /usr/bin/python
 ARDUINO_BIN ?= /usr/bin/arduino
 PACKAGE ?= ~/.arduino15/packages/esp8266
-ESPOTA = $(shell find $(PACKAGE) -type f -name espota.py)
-#MKSPIFFS = $(shell $(ARDUINO_BIN) --get-pref runtime.tools.mkspiffs.path)/mkspiffs
-MKSPIFFS = $(shell find $(PACKAGE) -type f -name mkspiffs)
 SKETCH_DIR = moodlamp
-INO = moodlamp.ino
 BUILD_DIR = build
+INO = moodlamp.ino
+
 OTA_HOST = moodlamp.local
 OTA_PORT = 8266
+
+ESPOTA = $(shell find $(PACKAGE) -type f -name espota.py)
+MKSPIFFS = $(shell find $(PACKAGE) -type f -name mkspiffs)
+
 SPIFFS_IMG = moodlamp.spiffs.bin
 
 $(BUILD_DIR):
@@ -23,7 +26,7 @@ compile: $(BUILD_DIR)
       $(SKETCH_DIR)/$(INO)
 
 program: compile
-	@env python2 $(ESPOTA) \
+	$(PYTHON_BIN) $(ESPOTA) \
       --ip $(OTA_HOST) \
       --port $(OTA_PORT) \
       --file $(BUILD_DIR)/moodlamp.cpp.bin \
@@ -38,7 +41,7 @@ spiffs: $(BUILD_DIR)
       $(BUILD_DIR)/$(SPIFFS_IMG)
 
 data: spiffs
-	@env python2 $(ESPOTA) \
+	$(PYTHON_BIN) $(ESPOTA) \
       --ip $(OTA_HOST) \
       --port $(OTA_PORT) \
       --spiffs \
