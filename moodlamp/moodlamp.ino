@@ -215,13 +215,18 @@ void errorLoop() {
 }
 
 void setErrorIndicator() {
-    RGB error = {255, 0, 0};
+    RGB error = {100, 0, 0};
     setAllLed(error);
 }
 
-void setReadyIndicator() {
-    RGB ready = {0, 70, 0};
-    setAllLed(ready);
+void setInitIndicator() {
+    RGB init = {120, 30, 0};
+    setAllLed(init);
+}
+
+void setAPIndicator() {
+    RGB ap = {0, 30, 0};
+    setAllLed(ap);
 }
 
 void mountFS() {
@@ -283,6 +288,7 @@ void setup() {
     Serial.println("\n\nStart");
     analogWriteFreq(2000);
     analogWriteRange(255);
+    setInitIndicator();
     mountFS();
     connectToAP();
     setupOTA();
@@ -291,7 +297,7 @@ void setup() {
 }
 
 void loop() {
-    setReadyIndicator();
+    setAPIndicator();
 
     while(1) {
         server.handleClient();
