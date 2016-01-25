@@ -9,6 +9,8 @@
 #include "rgbled.h"
 #include "rainbow.h"
 
+#define STA_TRY_COUNT 3
+#define AP_FALLBACK true
 #define NUM_LEDS 2
 
 #define SRV_PORT 80
@@ -18,6 +20,10 @@ const char* ssid = "<your_ssid>";
 const char* password = "<your_password>";
 const char* mdns_hostname = "moodlamp";
 const char* ota_password = "<OTA_password>";
+
+bool ap_mode = false;
+const char* ap_ssid = "MoodLamp";
+const char* ap_password = "<ap_password>";
 
 ESP8266WebServer server(SRV_PORT);
 
@@ -189,24 +195,40 @@ bool getRainbowActionFromArguments() {
 
 //================= INIT =================
 
-void connectToAP() {
-    Serial.print("[WIFI-STA] Connecting to ");
+bool connectAsStation() {
+    Serial.print("[WIFI-STA] Connecting to '");
     Serial.print(ssid);
+    Serial.println("'");
 
-    WiFi.begin(ssid, password);
-
-    for (int i = 0; i < 20; i++) {
-        if (WiFi.status() == WL_CONNECTED)
-            break;
-        delay(500);
-        Serial.print(" .");
+    for (uint8_t i = 1; i <= STA_TRY_COUNT; i++) {
+        WiFi.begin(ssid, password);
+        Serial.print("[WIFI-STA] Try #");
+        Serial.println(i);
+        if (WiFi.waitForConnectResult() == WL_CONNECTED) {
+            Serial.println("[WIFI-STA] Connected");
+            Serial.print("[WIFI-STA] MoodLamp is available at ");
+            Serial.print(WiFi.localIP());
+            Serial.println();
+            ap_mode = false;
+            return true;
+        } else {
+            Serial.println("[WIFI-STA][ERROR] Failed to connect, retrying");
+            delay(1000);
+        }
     }
-    if (WiFi.status() != WL_CONNECTED) {
-        Serial.println("\n[WIFI-STA][ERROR] Cannot connect to AP");
-        errorLoop();
-    }
+    return false;
+}
 
-    Serial.println("\n[WIFI-STA] Connected");
+void setupAPMode() {
+    Serial.println("[WIFI-AP] Configuring access point '");
+    Serial.print(ap_ssid);
+    Serial.println("'");
+    WiFi.softAP(ap_ssid, ap_password);
+    ap_mode = true;
+    IPAddress ip = WiFi.softAPIP();
+    Serial.print("[WIFI-AP] Moodlamp is available at ");
+    Serial.println(ip);
+    Serial.println("[WIFI-AP] Access point configured");
 }
 
 void errorLoop() {
@@ -224,8 +246,13 @@ void setInitIndicator() {
     setAllLed(init);
 }
 
+void setStaIndicator() {
+    RGB sta = {0, 30, 0};
+    setAllLed(sta);
+}
+
 void setAPIndicator() {
-    RGB ap = {0, 30, 0};
+    RGB ap = {0, 40, 70};
     setAllLed(ap);
 }
 
@@ -236,6 +263,18 @@ void mountFS() {
         errorLoop();
     }
     Serial.println("[SPIFFS] Mounted");
+}
+
+void setupWiFi() {
+    if (!connectAsStation()) {
+        if (AP_FALLBACK) {
+            Serial.println("[ERROR] Falling back to AP mode");
+            setupAPMode();
+        } else {
+            Serial.println("[ERROR] Failed to setup WiFi");
+            errorLoop();
+        }
+    }
 }
 
 void setupOTA() {
@@ -276,11 +315,9 @@ void setupWebServer() {
     server.on("/restart", HTTP_GET, handleRestart);
     server.onNotFound(handleNotFound);
 
-    server.begin();
-    Serial.print("[WIFI-STA] MoodLamp is ready to use at ");
-    Serial.print(WiFi.localIP());
-    Serial.print(":");
+    Serial.print("[WEB] Server started on port ");
     Serial.println(SRV_PORT);
+    server.begin();
 }
 
 void setup() {
@@ -290,14 +327,19 @@ void setup() {
     analogWriteRange(255);
     setInitIndicator();
     mountFS();
-    connectToAP();
+    setupWiFi();
     setupOTA();
     setupWebServer();
     Serial.println("[INFO] MoodLamp initialized");
 }
 
 void loop() {
-    setAPIndicator();
+    if (ap_mode) {
+        setAPIndicator();
+    } else {
+        setStaIndicator();
+    }
+
 
     while(1) {
         server.handleClient();
