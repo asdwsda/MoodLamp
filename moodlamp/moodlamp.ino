@@ -210,7 +210,7 @@ bool connectAsStation() {
             Serial.println("[WIFI-STA] Connected");
             Serial.print("[WIFI-STA] MoodLamp is available at ");
             Serial.print(WiFi.localIP());
-            Serial.println();
+            Serial.println("");
             ap_mode = false;
             return true;
         } else {
