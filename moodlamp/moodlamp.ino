@@ -98,6 +98,7 @@ void handleStatus() {
 void handleNotFound() {
     serveFile(server.uri());
 }
+
 void handleRestart() {
     responseOk();
     ESP.restart();
@@ -157,6 +158,7 @@ String getContentType(String filename){
 }
 
 void serveFile(String path) {
+    path = "/www" + path;
     if (SPIFFS.exists(path)) {
         File file = SPIFFS.open(path, "r");
         String content_type = getContentType(path);
