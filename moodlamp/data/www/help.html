@@ -1,0 +1,34 @@
+<html>
+<head>
+  <title>Help</title>
+</head>
+<body>
+  <h1>Available commands:</h1>
+  <ul>
+    <li>
+      /color: Set color of given LED.
+      <ul>
+        <li>id: 0..255 # Id of the LED to set. If not set, all leds will be set.</li>
+        <li>r: 0..255 # Red color component. Will be 0 if not set.</li>
+        <li>g: 0..255 # Green color component. Will be 0 if not set.</li>
+        <li>b: 0..255 # Blue color component. Will be 0 if not set.</li>
+      </ul>
+    </li>
+    <li>
+      /rainbow: Control rainbow animation.
+      <ul>
+        <li>action: start|stop|pause|reset # Start, stop, pause or reset animation.</li>
+      </ul>
+    </li>
+    <li>
+      /restart: Restart the mood lamp.
+    </li>
+    <li>
+      /status: Return the current mode and color of LEDs in JSON format.
+    </li>
+    <li>
+      /help: Show this page.
+    </li>
+  </ul>
+</body>
+</html>

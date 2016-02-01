@@ -56,23 +56,7 @@ void handleRoot() {
 }
 
 void handleHelp() {
-    String msg = "Available commands:\n\n";
-    msg += "/color: Set color of given led.\n";
-    msg += "\tArguments:\n";
-    msg += "\t\tid:\t0..255\tId of the LED to set. If not set, all leds will be set.\n";
-    msg += "\t\tr:\t0..255\tRed color component. Will be 0 if not set.\n";
-    msg += "\t\tg:\t0..255\tGreen color component. Will be 0 if not set.\n";
-    msg += "\t\tb:\t0..255\tBlue color component. Will be 0 if not set.\n";
-    msg += "/rainbow: Control rainbow animation.\n";
-    msg += "\tArguments:\n";
-    msg += "\t\taction:\tstart|stop|pause|reset\tStart, stop, pause or reset animation.\n";
-    msg += "/restart: Restart the mood lamp.\n";
-    msg += "/status: Return the current mode and color of LEDs in JSON format.\n";
-    msg += "/help: Show this page.\n";
-
-    msg += "\n";
-
-    server.send(200, "text/plain", msg);
+    serveFile("/help.html");
 }
 
 void handleStatus() {
