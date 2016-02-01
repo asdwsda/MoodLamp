@@ -12,7 +12,6 @@
 #define STA_TRY_COUNT 3
 #define AP_FALLBACK true
 #define NUM_LEDS 2
-
 #define SRV_PORT 80
 #define OTA_PORT 8266
 
@@ -202,6 +201,7 @@ bool connectAsStation() {
     Serial.print(ssid);
     Serial.println("'");
 
+    WiFi.mode(WIFI_STA);
     for (uint8_t i = 1; i <= STA_TRY_COUNT; i++) {
         WiFi.begin(ssid, password);
         Serial.print("[WIFI-STA] Try #");
@@ -225,6 +225,7 @@ void setupAPMode() {
     Serial.println("[WIFI-AP] Configuring access point '");
     Serial.print(ap_ssid);
     Serial.println("'");
+    WiFi.mode(WIFI_AP);
     WiFi.softAP(ap_ssid, ap_password);
     ap_mode = true;
     IPAddress ip = WiFi.softAPIP();
