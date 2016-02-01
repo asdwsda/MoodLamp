@@ -6,118 +6,117 @@
 </head>
 <body onload="refreshStatus()">
 <div class="header">
-    <h1 class="header">MoodLamp control</h1>
+  <h1 class="header">MoodLamp control</h1>
 </div>
 <div class="row">
-    <div class="col-3">
-        <div class="box">
-            <div class="box-heading">Led #1</div>
-            <div class="box-content">
-                <table>
-                    <tr>
-                        <td class="name">
-                            Red:
-                        </td>
-                        <td class="slider">
-                            <input type="range" class="red" min="0" max="255" value="0" data-led_id="0" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
-                        </td>
-                        <td class="sliderVal" id="r_0_val">
-                            0
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Green:
-                        </td>
-                        <td>
-                            <input type="range" class="green" min="0" max="255" value="0" data-led_id="0" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
-                        </td>
-                        <td id="g_0_val">
-                            0
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Blue:
-                        </td>
-                        <td>
-                            <input type="range" class="blue" min="0" max="255" value="0" data-led_id="0" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
-                        </td>
-                        <td id="b_0_val">
-                            0
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+  <div class="col-3">
+    <div class="box">
+      <div class="box-heading">Led #1</div>
+      <div class="box-content">
+        <table>
+          <tr>
+            <td class="name">
+              Red:
+            </td>
+            <td class="slider">
+              <input type="range" class="red" min="0" max="255" value="0" data-led_id="0" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
+            </td>
+            <td class="sliderVal" id="r_0_val">
+              0
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Green:
+            </td>
+            <td>
+              <input type="range" class="green" min="0" max="255" value="0" data-led_id="0" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
+            </td>
+            <td id="g_0_val">
+              0
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Blue:
+            </td>
+            <td>
+              <input type="range" class="blue" min="0" max="255" value="0" data-led_id="0" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
+            </td>
+            <td id="b_0_val">
+              0
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <div class="col-3">
-        <div class="box">
-            <div class="box-heading">Led #2</div>
-            <div class="box-content">
-                <table>
-                    <tr>
-                        <td class="name">
-                            Red:
-                        </td>
-                        <td class="slider">
-                            <input type="range" class="red" min="0" max="255" value="0" data-led_id="1" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
-                        </td>
-                        <td class="sliderVal" id="r_1_val">
-                            0
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Green:
-                        </td>
-                        <td>
-                            <input type="range" class="green" min="0" max="255" value="0" data-led_id="1" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
-                        </td>
-                        <td id="g_1_val">
-                            0
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Blue:
-                        </td>
-                        <td>
-                            <input type="range" class="blue" min="0" max="255" value="0" data-led_id="1" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
-                        </td>
-                        <td id="b_1_val">
-                            0
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+  </div>
+  <div class="col-3">
+    <div class="box">
+      <div class="box-heading">Led #2</div>
+      <div class="box-content">
+        <table>
+          <tr>
+            <td class="name">
+              Red:
+            </td>
+            <td class="slider">
+              <input type="range" class="red" min="0" max="255" value="0" data-led_id="1" data-channel="r" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
+            </td>
+            <td class="sliderVal" id="r_1_val">
+              0
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Green:
+            </td>
+            <td>
+              <input type="range" class="green" min="0" max="255" value="0" data-led_id="1" data-channel="g" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
+            </td>
+            <td id="g_1_val">
+              0
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Blue:
+            </td>
+            <td>
+              <input type="range" class="blue" min="0" max="255" value="0" data-led_id="1" data-channel="b" oninput="updateSliderVal(this)" onchange="changeColor(this)" disabled>
+            </td>
+            <td id="b_1_val">
+              0
+            </td>
+          </tr>
+        </table>
+      </div>    </div>
+  </div>
+  <div class="col-3">
+    <div class="box">
+      <div class="box-heading">Rainbow</div>
+      <div class="box-content">
+        <table class="rainbow">
+          <tr>
+            <td class="btnCell">
+              <button id="start-rainbow" onclick="rainbow('start')">Start</button>
+            </td>
+            <td class="btnCell">
+              <button id="stop-rainbow" onclick="rainbow('stop')">Stop</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="btnCell">
+              <button id="pause-rainbow" onclick="rainbow('pause')">Pause</button>
+            </td>
+            <td class="btnCell">
+              <button id="reset-rainbow" onclick="rainbow('reset')">Reset</button>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <div class="col-3">
-        <div class="box">
-            <div class="box-heading">Rainbow</div>
-            <div class="box-content">
-                <table class="rainbow">
-                    <tr>
-                        <td class="btnCell">
-                            <button id="start-rainbow" onclick="rainbow('start')">Start</button>
-                        </td>
-                        <td class="btnCell">
-                            <button id="stop-rainbow" onclick="rainbow('stop')">Stop</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="btnCell">
-                            <button id="pause-rainbow" onclick="rainbow('pause')">Pause</button>
-                        </td>
-                        <td class="btnCell">
-                            <button id="reset-rainbow" onclick="rainbow('reset')">Reset</button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
 
 </body>
